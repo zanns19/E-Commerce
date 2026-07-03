@@ -1,16 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 
 export default function PoweredBy() {
   return (
-    <div className="flex justify-center mt-6">
-
-      <Link
+    <div className="mt-6 flex justify-center">
+      <a
         href="https://github.com/zanns19"
         target="_blank"
-        className="relative group"
+        rel="noopener noreferrer"
+        className="group relative"
       >
         <Image
           src="/mylogo.png"
@@ -18,34 +17,16 @@ export default function PoweredBy() {
           width={34}
           height={34}
           className="invert"
+          style={{
+            width: "34px",
+            height: "34px",
+          }}
         />
 
-        <div
-          className="
-            absolute
-            left-1/2
-            -translate-x-1/2
-            bottom-full
-            mb-3
-            opacity-0
-            group-hover:opacity-100
-            group-hover:-translate-y-2
-            transition-all
-            duration-300
-            whitespace-nowrap
-            bg-black
-            text-white
-            px-3
-            py-2
-            rounded-lg
-            text-xs
-          "
-        >
+        <div className="absolute bottom-full left-1/2 mb-3 -translate-x-1/2 rounded-lg bg-black px-3 py-2 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-300 group-hover:-translate-y-2 group-hover:opacity-100">
           Powered by <strong>Zuhair Anns Anwar</strong>
         </div>
-
-      </Link>
-
+      </a>
     </div>
   );
 }

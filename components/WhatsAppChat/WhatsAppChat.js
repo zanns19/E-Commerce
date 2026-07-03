@@ -8,7 +8,7 @@ export default function WhatsAppChat() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-24 right-2.5 sm:right-6 z-50">
+    <div className="fixed bottom-14 right-2.5 sm:right-6 z-50">
 
       <div className="flex items-center gap-2">
 

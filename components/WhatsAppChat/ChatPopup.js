@@ -7,21 +7,7 @@ import PoweredBy from "./PoweredBy";
 export default function ChatPopup({ open }) {
   return (
     <div
-      className={`
-        fixed
-        bottom-40
-        right-4
-        sm:right-10
-        w-72
-        sm:w-80
-        bg-white
-        rounded-2xl
-        shadow-2xl
-        overflow-hidden
-        transition-all
-        duration-300
-        origin-bottom-right
-        z-50
+      className={`fixed bottom-40 right-4 sm:right-10 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-right z-50
         ${
           open
             ? "opacity-100 scale-100 visible"
@@ -61,19 +47,10 @@ export default function ChatPopup({ open }) {
         </p>
 
         {/* Customer Support Card */}
-        <Link
+        <a
           href="https://wa.me/923356599132"
           target="_blank"
-          className="
-            flex
-            items-center
-            gap-4
-            rounded-xl
-            bg-gray-100
-            hover:bg-gray-200
-            p-3
-            transition
-          "
+          className="flex items-center gap-4 rounded-xl bg-gray-100 hover:bg-gray-200 p-3 transition"
         >
           <div className="bg-green-500 rounded-full p-3">
             <svg
@@ -95,7 +72,7 @@ export default function ChatPopup({ open }) {
               Click to chat
             </p>
           </div>
-        </Link>
+        </a>
 
         {/* Powered By */}
         <PoweredBy />
