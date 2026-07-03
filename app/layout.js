@@ -1,7 +1,9 @@
 import { Geist, Geist_Mono , Gulzar } from "next/font/google";
+import FacebookSDK from "@/components/FacebookSDK";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import WhatsAppChat from "@/components/WhatsAppChat/WhatsAppChat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +31,9 @@ export default function RootLayout({ children }) {
     >
       <body className={`${gulzar.variable}min-h-full flex flex-col`}>
         <Navbar/>
+        <FacebookSDK />
         {children}
+        <WhatsAppChat />
         <Footer/>
         </body>
     </html>
