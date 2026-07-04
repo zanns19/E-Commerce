@@ -1,8 +1,8 @@
 "use client";
 import { FaWhatsapp } from "react-icons/fa";
 
-export default function WhatsAppButton({ product }) {
-  const handleOrder = () => {
+export default function WhatsAppButton({ product, compact = false }) {
+const handleOrder = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || {};
 
     const quantity = cart[product._id] || 1;
@@ -38,13 +38,16 @@ Thank you.`;
 
   return (
     <button
-      onClick={handleOrder}
-      className="w-full lg:w-auto flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
-      >
-      {/* WhatsApp Icon */}
-      <FaWhatsapp className="w-6 h-6 text-white" />
-     
-      Order via WhatsApp
-    </button>
+  onClick={handleOrder}
+  className={
+    compact
+      ? "inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-xs font-semibold text-white hover:bg-green-700 transition"
+      : "flex w-full lg:w-auto items-center justify-center gap-3 rounded-lg bg-green-600 px-6 py-3 font-semibold text-white hover:bg-green-700 transition"
+  }
+>
+  <FaWhatsapp className={compact ? "h-4 w-4" : "h-6 w-6"} />
+
+  {compact ? "Shop Now" : "Order via WhatsApp"}
+</button>
   );
 }

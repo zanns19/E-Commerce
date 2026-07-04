@@ -20,7 +20,7 @@ export default async function ProductPage({ params }) {
   let product;
 
   try {
-    product = await Product.findById(id).lean();
+    product = await Product.findById(id).lean().exec();
   } catch {
     notFound();
   }
@@ -29,8 +29,10 @@ export default async function ProductPage({ params }) {
     notFound();
   }
 
-  product._id = product._id.toString();
-
+product = {
+  ...product,
+  _id: product._id.toString(),
+};
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="grid lg:grid-cols-2 gap-10">
