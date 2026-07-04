@@ -1,7 +1,8 @@
-import { ObjectId } from "mongodb";
 import { notFound } from "next/navigation";
 
-import clientPromise from "@/lib/mongodb";
+
+import connectDB from "@/lib/mongodb";
+import Product from "@/models/Product";
 
 import ProductImage from "@/components/ProductImage";
 import ProductInfo from "@/components/ProductInfo";
@@ -11,18 +12,18 @@ import FacebookLike from "@/components/FacebookLike";
 import FacebookComments from "@/components/FacebookComments";
 
 export default async function ProductPage({ params }) {
-  const client = await clientPromise;
-  const db = client.db("AhmadElectroGas");
+  
+  await connectDB();
 
-  const { id } = params;
+  const { id } = await params;
 
-  if (!ObjectId.isValid(id)) {
+  let product;
+
+  try {
+    product = await Product.findById(id).lean();
+  } catch {
     notFound();
   }
-
-  const product = await db.collection("products").findOne({
-    _id: new ObjectId(id),
-  });
 
   if (!product) {
     notFound();

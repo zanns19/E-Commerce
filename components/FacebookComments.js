@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import StarRating from "./StarRating";
 
 export default function FacebookComments({ product }) {
   useEffect(() => {
@@ -15,6 +16,7 @@ export default function FacebookComments({ product }) {
     <div className="mt-10">
       <h2 className="text-2xl font-semibold mb-6">
         Customer Reviews
+        <StarRating rating={product.rating} />
       </h2>
 
       <div

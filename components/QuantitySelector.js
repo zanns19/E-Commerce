@@ -42,14 +42,14 @@ export default function QuantitySelector({ product }) {
     <div className="space-y-6">
 
       {/* Total Price */}
-      <div className="text-center">
+      <div className="md:text-left text-center">
         <h2 className="text-4xl font-bold text-green-700">
           Rs. {totalPrice.toLocaleString()}
         </h2>
 
-        <p className="text-gray-500 mt-2">
+        {/* <p className="text-gray-500 mt-2">
           Rs. {product.price.toLocaleString()} × {qty}
-        </p>
+        </p> */}
       </div>
 
       {/* Quantity Buttons */}

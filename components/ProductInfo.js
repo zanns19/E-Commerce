@@ -36,11 +36,11 @@ export default function ProductInfo({ product }) {
       </div>
 
       {/* Price */}
-      <div>
+      {/* <div>
         <h2 className="text-4xl font-bold text-green-700">
           Rs. {product.price}
         </h2>
-      </div>
+      </div> */}
 
     </div>
   );
