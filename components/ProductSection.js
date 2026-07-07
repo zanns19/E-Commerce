@@ -17,7 +17,7 @@ export default function ProductSection({ products = [] }) {
       <div className="mt-1 grid grid-cols-2 gap-x-2 gap-y-8 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-10 xl:gap-x-14">
         {displayProducts.map((product, index) => (
           <ProductCard
-            key={product._id}
+            // key={product._id}
             product={product}
             badge={index === 0 ? "In Stock" : "New"}
             badgeColor={
