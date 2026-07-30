@@ -13,7 +13,7 @@ export default async function Home() {
         .lean()
         .exec();
     
-      // Convert ObjectId to string
+      // Convert ObjectId to string.
       const formattedProducts = products.map((product) => ({
         ...product,
         _id: product._id.toString(),
