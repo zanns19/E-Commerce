@@ -10,7 +10,7 @@ export default function FacebookLike({ product }) {
     }
   }, []);
 
-  // Change this to your production domain
+  // will Change this to my production domain
   const pageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/products/${product._id}`;
 
   return (
