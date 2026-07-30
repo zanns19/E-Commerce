@@ -26,6 +26,7 @@ I want to order the following product:
 Please confirm its availability.
 
 Thank you.`;
+// Ahmad's number
 
     const phone = "923356599132";
 
