@@ -31,7 +31,12 @@ export default function HeroCarousel() {
 
   return (
     <div className="relative w-full overflow-hidden">
-
+ 
+      {/* Overlay Text */}
+    
+<div className="absolute inset-0 flex items-start justify-center pt-1 sm:pt-4 md:pt-6">
+  <HeroText />
+</div>
       {/* Images */}
       <div className="relative h-44 sm:h-56 md:h-80 lg:h-96 xl:h-[720px]">
 
@@ -54,10 +59,6 @@ export default function HeroCarousel() {
 
       </div>
 
-      {/* Overlay Text */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <HeroText />
-      </div>
 
       {/* Previous */}
       <button
