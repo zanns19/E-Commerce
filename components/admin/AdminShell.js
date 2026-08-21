@@ -58,34 +58,54 @@ export default function AdminShell({ admin, children }) {
             <Zap className="absolute h-4 w-4 text-electric" strokeWidth={2.5} style={{ transform: "translate(-3px,-2px)" }} />
             <Flame className="absolute h-4 w-4 text-gas" strokeWidth={2.5} style={{ transform: "translate(3px,2px)" }} />
           </span>
-          <span className="font-mono text-sm font-semibold text-white">
+          <span className="font-mono text-sm font-semibold text-black">
             Ahmad<span className="text-electric">Electro</span>
             <span className="text-gas">Gas</span>
           </span>
         </div>
 
-        <nav className="flex-1 space-y-1 px-3 py-5">
-          {NAV_ITEMS.map((item) => {
-            const active = item.exact
-              ? pathname === item.href
-              : pathname.startsWith(item.href);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition ${
-                  active
-                    ? "bg-white/10 text-white"
-                    : "text-mist-500 hover:bg-white/5 hover:text-white"
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <nav className="flex-1 px-3 py-6">
+  <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-mist-600">
+    Menu
+  </p>
+
+  <div className="space-y-1.5">
+    {NAV_ITEMS.map((item) => {
+      const active = item.exact
+        ? pathname === item.href
+        : pathname.startsWith(item.href);
+
+      const Icon = item.icon;
+
+      return (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={`group relative flex items-center gap-3 rounded-lg px-3.5 py-3 text-sm font-medium transition-all duration-200 ${
+            active
+              ? "bg-blue-50 text-black shadow-sm"
+              : "text-mist-500 hover:bg-white/5 hover:text-black"
+          }`}
+        >
+          {/* Active indicator */}
+          {active && (
+            <span className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-r-full bg-green-500" />
+          )}
+
+          <Icon
+            className={`h-[17px] w-[17px] transition-colors ${
+              active
+                ? "text-blue"
+                : "text-mist-500 group-hover:text-black"
+            }`}
+          />
+
+          <span>{item.label}</span>
+        </Link>
+      );
+    })}
+  </div>
+</nav>
 
         <div className="border-t border-white/10 p-4 font-mono text-[11px] text-mist-500">
           Admin Panel v1.0
@@ -107,7 +127,7 @@ export default function AdminShell({ admin, children }) {
               onClick={() => setMenuOpen((o) => !o)}
               className="flex items-center gap-2.5 rounded-md py-1.5 pl-1.5 pr-2.5 transition hover:bg-mist-100"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink font-mono text-xs font-semibold text-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink font-mono text-xs font-semibold text-black">
                 {initials}
               </span>
               <span className="text-sm font-medium text-ink">{admin?.name}</span>

@@ -141,7 +141,7 @@ export default function ProductForm({ initialData, productId }) {
         <button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ink-700 disabled:opacity-60"
+          className="rounded-md bg-green-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-green-600 disabled:opacity-60"
         >
           {loading ? "Saving…" : isEdit ? "Save changes" : "Add product"}
         </button>
