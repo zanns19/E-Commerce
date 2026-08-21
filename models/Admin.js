@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
+
 const AdminSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
-
     email: {
       type: String,
       required: true,
@@ -15,32 +14,12 @@ const AdminSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-
-    password: {
+    passwordHash: {
       type: String,
       required: true,
     },
-
-    verified: {
-      type: Boolean,
-      default: true,
-    },
-
-    resetPasswordOtp: {
-      type: String,
-      default: null,
-    },
-
-    resetPasswordOtpExpiry: {
-      type: Date,
-      default: null,
-    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-// Prevent model overwrite during development
-export default mongoose.models.Admin ||
-  mongoose.model("Admin", AdminSchema);
+export default mongoose.models.Admin || mongoose.model("Admin", AdminSchema);
