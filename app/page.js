@@ -15,7 +15,7 @@ const CATEGORY_ORDER = [
 export default async function Home() {
   await connectDB();
 
-  const products = await Product.find({}).sort({ createdAt: -1 }).lean().exec();
+  const products = await Product.find({ featured: true }).sort({ createdAt: -1 }).lean();
 
   // Convert ObjectId to string.
   const formattedProducts = products.map((product) => ({
