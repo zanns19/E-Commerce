@@ -20,7 +20,12 @@ export default function CategorySection({ title, products = [] }) {
                 ? "bg-green-200 text-green-700"
                 : "bg-red-200 text-red-700"
             }
+            variant={product.category === "Discount" ? "discount" : "default"}
           />
+
+    
+
+
         ))}
       </div>
     </section>

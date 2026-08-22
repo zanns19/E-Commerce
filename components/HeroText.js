@@ -18,7 +18,7 @@ export default function HeroText() {
     if (headingIndex >= headingWords.length) {
       const timer = setTimeout(() => {
         setShowParagraph(true);
-      }, 50);
+      }, 100);
 
       return () => clearTimeout(timer);
     }
