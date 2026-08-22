@@ -1,14 +1,21 @@
-import clientPromise from "@/lib/mongodb";
+import { NextResponse } from "next/server";
+import connectDB from "@/lib/mongodb";
+import Product from "@/models/Product";
 
 export async function GET() {
-  const client = await clientPromise;
+  await connectDB();
 
-  const db = client.db();
+  const products = await Product.find({ category: "Discount" })
+    .sort({ createdAt: -1 })
+    .lean()
+    .exec();
 
-  const products = await db
-    .collection("discount")
-    .find({})
-    .toArray();
+  const formatted = products.map((product) => ({
+    ...product,
+    _id: product._id.toString(),
+    orgprice: product.originalPrice,
+    dist: product.discount,
+  }));
 
-  return Response.json(products);
+  return NextResponse.json({ products: formatted });
 }

@@ -5,7 +5,8 @@ import { getAdminSession } from "@/lib/requireAdmin";
 
 export async function GET(request, { params }) {
   await dbConnect();
-  const product = await Product.findById(params.id);
+  const { id } = await params;
+  const product = await Product.findById(id);
 
   if (!product) {
     return NextResponse.json({ error: "Product not found." }, { status: 404 });
@@ -15,7 +16,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const session = getAdminSession();
+  const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
@@ -23,16 +24,21 @@ export async function PUT(request, { params }) {
   try {
     const body = await request.json();
     await dbConnect();
+    const { id } = await params;
 
     const product = await Product.findByIdAndUpdate(
-      params.id,
+      id,
       {
-        name: body.name,
+        product_name: body.product_name,
         category: body.category,
-        description: body.description,
+        desc: body.desc,
         price: body.price,
-        imageUrl: body.imageUrl,
-        inStock: body.inStock,
+        originalPrice: body.originalPrice,
+        discount: body.discount,
+        rating: body.rating,
+        image: body.image,
+        stock: body.stock,
+        featured: body.featured,
       },
       { new: true, runValidators: true }
     );
@@ -52,13 +58,14 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const session = getAdminSession();
+  const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
   await dbConnect();
-  const product = await Product.findByIdAndDelete(params.id);
+  const { id } = await params;
+  const product = await Product.findByIdAndDelete(id);
 
   if (!product) {
     return NextResponse.json({ error: "Product not found." }, { status: 404 });

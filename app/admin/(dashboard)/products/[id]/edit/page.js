@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic";
 
 export default async function EditProductPage({ params }) {
   await dbConnect();
-  const product = await Product.findById(params.id).lean();
+  const { id } = await params;
+  const product = await Product.findById(id).lean();
 
   if (!product) {
     notFound();
@@ -16,18 +17,22 @@ export default async function EditProductPage({ params }) {
   return (
     <div>
       <h1 className="text-xl font-bold tracking-tight text-ink">Edit product</h1>
-      <p className="mt-1 text-sm text-ink-500">{product.name}</p>
+      <p className="mt-1 text-sm text-ink-500">{product.product_name}</p>
 
       <div className="mt-6">
         <ProductForm
-          productId={params.id}
+          productId={id}
           initialData={{
-            name: product.name,
+            product_name: product.product_name,
             category: product.category,
-            description: product.description,
+            desc: product.desc,
             price: product.price,
-            imageUrl: product.imageUrl,
-            inStock: product.inStock,
+            originalPrice: product.originalPrice,
+            discount: product.discount,
+            rating: product.rating,
+            image: product.image,
+            stock: product.stock,
+            featured: product.featured,
           }}
         />
       </div>

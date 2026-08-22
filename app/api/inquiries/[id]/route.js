@@ -4,13 +4,14 @@ import Inquiry from "@/models/Inquiry";
 import { getAdminSession } from "@/lib/requireAdmin";
 
 export async function GET(request, { params }) {
-  const session = getAdminSession();
+  const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
   await dbConnect();
-  const inquiry = await Inquiry.findById(params.id);
+  const { id } = await params;
+  const inquiry = await Inquiry.findById(id);
 
   if (!inquiry) {
     return NextResponse.json({ error: "Inquiry not found." }, { status: 404 });
@@ -20,7 +21,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PATCH(request, { params }) {
-  const session = getAdminSession();
+  const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
@@ -28,9 +29,10 @@ export async function PATCH(request, { params }) {
   try {
     const { status } = await request.json();
     await dbConnect();
+    const { id } = await params;
 
     const inquiry = await Inquiry.findByIdAndUpdate(
-      params.id,
+      id,
       { status },
       { new: true, runValidators: true }
     );
@@ -50,13 +52,14 @@ export async function PATCH(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const session = getAdminSession();
+  const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
   await dbConnect();
-  const inquiry = await Inquiry.findByIdAndDelete(params.id);
+  const { id } = await params;
+  const inquiry = await Inquiry.findByIdAndDelete(id);
 
   if (!inquiry) {
     return NextResponse.json({ error: "Inquiry not found." }, { status: 404 });

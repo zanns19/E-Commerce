@@ -7,7 +7,8 @@ import { verifySessionToken, SESSION_COOKIE_NAME } from "@/lib/auth";
 
 export async function POST(request) {
   try {
-    const token = cookies().get(SESSION_COOKIE_NAME)?.value;
+    const cookieStore = await cookies();
+    const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
     const payload = token ? verifySessionToken(token) : null;
 
     if (!payload) {

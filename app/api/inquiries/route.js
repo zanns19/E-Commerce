@@ -5,7 +5,7 @@ import { getAdminSession } from "@/lib/requireAdmin";
 
 // GET is admin-only — this is the inbox of customer inquiries.
 export async function GET(request) {
-  const session = getAdminSession();
+  const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }

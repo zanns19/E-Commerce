@@ -18,28 +18,64 @@ export async function GET(request) {
 
 // POST is admin-only.
 export async function POST(request) {
-  const session = getAdminSession();
+  const session = await getAdminSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
   }
 
   try {
     const body = await request.json();
-    const { name, category, description, price, imageUrl, inStock } = body;
+    const {
+      product_name,
+      category,
+      desc,
+      price,
+      originalPrice,
+      discount,
+      rating,
+      image,
+      stock,
+      featured,
+    } = body;
 
-    if (!name) {
-      return NextResponse.json({ error: "Name is required." }, { status: 400 });
+    if (!product_name) {
+      return NextResponse.json(
+        { error: "Product name is required." },
+        { status: 400 }
+      );
+    }
+    if (!desc) {
+      return NextResponse.json(
+        { error: "Description is required." },
+        { status: 400 }
+      );
+    }
+    if (!image) {
+      return NextResponse.json(
+        { error: "Image is required." },
+        { status: 400 }
+      );
+    }
+    if (!category) {
+      return NextResponse.json(
+        { error: "Category is required." },
+        { status: 400 }
+      );
     }
 
     await dbConnect();
 
     const product = await Product.create({
-      name,
-      category: category || "other",
-      description: description || "",
+      product_name,
+      category,
+      desc,
       price: price || 0,
-      imageUrl: imageUrl || "",
-      inStock: inStock !== undefined ? inStock : true,
+      originalPrice: originalPrice || null,
+      discount: discount || 0,
+      rating: rating || 0,
+      image,
+      stock: stock || 0,
+      featured: featured !== undefined ? featured : false,
     });
 
     return NextResponse.json({ product }, { status: 201 });

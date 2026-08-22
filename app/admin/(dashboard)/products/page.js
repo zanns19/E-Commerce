@@ -2,13 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Zap, Flame, Package } from "lucide-react";
-
-const CATEGORY_META = {
-  electric: { label: "Electric", icon: Zap, color: "text-electric-dark" },
-  gas: { label: "Gas", icon: Flame, color: "text-gas-dark" },
-  other: { label: "Other", icon: Package, color: "text-ink-500" },
-};
+import { Plus, Pencil, Trash2, Tag } from "lucide-react";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -79,15 +73,14 @@ export default function AdminProductsPage() {
             </thead>
             <tbody className="divide-y divide-ink-600/10">
               {products.map((p) => {
-                const meta = CATEGORY_META[p.category] || CATEGORY_META.other;
-                const Icon = meta.icon;
+                const inStock = (p.stock ?? 0) > 0;
                 return (
                   <tr key={p._id} className="hover:bg-mist-100">
-                    <td className="px-5 py-3.5 font-medium text-ink">{p.name}</td>
+                    <td className="px-5 py-3.5 font-medium text-ink">{p.product_name}</td>
                     <td className="px-5 py-3.5">
-                      <span className={`flex items-center gap-1.5 ${meta.color}`}>
-                        <Icon className="h-3.5 w-3.5" />
-                        {meta.label}
+                      <span className="flex items-center gap-1.5 text-ink-500">
+                        <Tag className="h-3.5 w-3.5" />
+                        {p.category}
                       </span>
                     </td>
                     <td className="px-5 py-3.5 font-mono text-ink">
@@ -96,10 +89,10 @@ export default function AdminProductsPage() {
                     <td className="px-5 py-3.5">
                       <span
                         className={`rounded-full px-2.5 py-1 font-mono text-[11px] uppercase ${
-                          p.inStock ? "bg-ok/10 text-ok" : "bg-danger/10 text-danger"
+                          inStock ? "bg-ok/10 text-ok" : "bg-danger/10 text-danger"
                         }`}
                       >
-                        {p.inStock ? "In stock" : "Out of stock"}
+                        {inStock ? `In stock (${p.stock})` : "Out of stock"}
                       </span>
                     </td>
                     <td className="px-5 py-3.5">

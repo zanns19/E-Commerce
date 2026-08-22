@@ -37,7 +37,7 @@ export default function ProductCard({ product }) {
         />
 
         <Link
-          href={`/products/discount/${product._id}`}
+          href={`/products/${product._id}`}
           className="text-blue-600 hover:underline text-sm"
         >
           See Details
