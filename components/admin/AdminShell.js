@@ -65,47 +65,45 @@ export default function AdminShell({ admin, children }) {
         </div>
 
         <nav className="flex-1 px-3 py-6">
-  <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-mist-600">
-    Menu
-  </p>
+          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-mist-600">
+            Menu
+          </p>
 
-  <div className="space-y-1.5">
-    {NAV_ITEMS.map((item) => {
-      const active = item.exact
-        ? pathname === item.href
-        : pathname.startsWith(item.href);
+          <div className="space-y-1.5">
+            {NAV_ITEMS.map((item) => {
+              const active = item.exact
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
 
-      const Icon = item.icon;
+              const Icon = item.icon;
 
-      return (
-        <Link
-          key={item.href}
-          href={item.href}
-          className={`group relative flex items-center gap-3 rounded-lg px-3.5 py-3 text-sm font-medium transition-all duration-200 ${
-            active
-              ? "bg-blue-50 text-black shadow-sm"
-              : "text-mist-500 hover:bg-white/5 hover:text-black"
-          }`}
-        >
-          {/* Active indicator */}
-          {active && (
-            <span className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-r-full bg-green-500" />
-          )}
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`group relative flex items-center gap-3 rounded-lg px-3.5 py-3 text-sm font-medium transition-all duration-200 ${active
+                      ? "bg-blue-50 text-black shadow-sm"
+                      : "text-mist-500 hover:bg-white/5 hover:text-black"
+                    }`}
+                >
+                  {/* Active indicator */}
+                  {active && (
+                    <span className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-r-full bg-green-500" />
+                  )}
 
-          <Icon
-            className={`h-[17px] w-[17px] transition-colors ${
-              active
-                ? "text-blue"
-                : "text-mist-500 group-hover:text-black"
-            }`}
-          />
+                  <Icon
+                    className={`h-[17px] w-[17px] transition-colors ${active
+                        ? "text-blue"
+                        : "text-mist-500 group-hover:text-black"
+                      }`}
+                  />
 
-          <span>{item.label}</span>
-        </Link>
-      );
-    })}
-  </div>
-</nav>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
 
         <div className="border-t border-white/10 p-4 font-mono text-[11px] text-mist-500">
           Admin Panel v1.0

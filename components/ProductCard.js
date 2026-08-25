@@ -189,9 +189,10 @@ export default function ProductCard({
           <div className="flex items-center gap-x-3 sm:justify-between">
             <span
               className={`text-[15px] font-bold sm:text-[16px] lg:text-xl xl:text-[27px]
-                ${product.price > 2500
-                  ? "text-red-900"
-                  : "text-green-900"
+                ${
+                  product.price > 2500
+                    ? "text-red-900"
+                    : "text-green-900"
                 }`}
             >
               Rs. {product.price}
@@ -220,7 +221,7 @@ export default function ProductCard({
       <div className="absolute bottom-0 left-3 w-full translate-y-full p-4 opacity-0 transition-all duration-500 ease-in-out group-hover:-translate-y-[42px] group-hover:opacity-100">
         <Link
           href={`/products/${product._id}`}
-          className="mx-auto block w-fit rounded-lg border-2 border-gray-800 bg-transparent px-5 py-3 text-center font-semibold text-gray-800 shadow-md transition-colors duration-300 hover:bg-gray-800 hover:text-white dark:border-gray-300 dark:text-gray-300 dark:hover:bg-gray-300 dark:hover:text-gray-900"
+          className="mx-auto block w-fit rounded-lg border-2 border-gray-800 bg-transparent px-3 py-3 text-center font-semibold text-gray-800 shadow-md transition-colors duration-300 hover:bg-gray-800 hover:text-white dark:border-gray-300 dark:text-gray-300 dark:hover:bg-gray-300 dark:hover:text-gray-900"
         >
           Show Details
         </Link>
