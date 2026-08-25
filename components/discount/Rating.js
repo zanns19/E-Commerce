@@ -1,26 +1,25 @@
-export default function Rating({ rating }) {
+import { Star } from "lucide-react";
+
+export default function Rating({ rating = 5 }) {
+  const numericRating = Number(rating) || 5;
+
   return (
-    <div className="flex items-center mt-3">
-
-      {[1, 2, 3, 4, 5].map((star) => (
-        <svg
-          key={star}
-          className={`w-4 h-4 ${
-            rating >= star
-              ? "text-yellow-400"
-              : "text-gray-300"
-          }`}
-          fill="currentColor"
-          viewBox="0 0 22 20"
-        >
-          <path d="M20.924 7.625..." />
-        </svg>
-      ))}
-
-      <span className="ml-3 bg-blue-100 px-2 rounded">
-        {rating}
+    <div className="flex items-center gap-1">
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={`h-3 w-3 ${
+              numericRating >= star
+                ? "fill-amber-400 text-amber-400"
+                : "text-slate-200"
+            }`}
+          />
+        ))}
+      </div>
+      <span className="rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
+        {numericRating.toFixed(1)}
       </span>
-
     </div>
   );
 }
