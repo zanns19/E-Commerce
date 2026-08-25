@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Search, X, Filter, RotateCcw } from "lucide-react";
 import CategorySection from "./CategorySection";
 
@@ -16,6 +16,42 @@ const CATEGORY_ORDER = [
 export default function ProductsCatalog({ initialProducts = [] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const searchInputRef = useRef(null);
+
+  // Auto-focus search input when requested via URL query (?focus=search) or custom event
+  useEffect(() => {
+    const checkAndFocus = () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("focus") === "search") {
+        setTimeout(() => {
+          if (searchInputRef.current) {
+            searchInputRef.current.focus();
+            searchInputRef.current.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }
+        }, 100);
+      }
+    };
+
+    checkAndFocus();
+
+    const handleCustomFocus = () => {
+      if (searchInputRef.current) {
+        searchInputRef.current.focus();
+        searchInputRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    };
+
+    window.addEventListener("focus-product-search", handleCustomFocus);
+    return () => {
+      window.removeEventListener("focus-product-search", handleCustomFocus);
+    };
+  }, []);
 
   // Calculate product counts per category
   const categoryCounts = useMemo(() => {
@@ -82,6 +118,8 @@ export default function ProductsCatalog({ initialProducts = [] }) {
             <div className="relative flex items-center">
               <Search className="pointer-events-none absolute left-4 h-5 w-5 text-gray-400" />
               <input
+                ref={searchInputRef}
+                id="product-search-input"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
