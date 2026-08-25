@@ -2,7 +2,7 @@
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function WhatsAppButton({ product, compact = false }) {
-const handleOrder = () => {
+  const handleOrder = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || {};
 
     const quantity = cart[product._id] || 1;
@@ -26,7 +26,6 @@ I want to order the following product:
 Please confirm its availability.
 
 Thank you.`;
-// Ahmad's number
 
     const phone = "923356599132";
 
@@ -37,18 +36,35 @@ Thank you.`;
     window.open(whatsappUrl, "_blank");
   };
 
+  if (compact) {
+    return (
+      <button
+        onClick={handleOrder}
+        className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition-all duration-200 hover:bg-emerald-700 hover:shadow-md active:scale-95"
+      >
+        <FaWhatsapp className="h-4 w-4" />
+        <span>Shop Now</span>
+      </button>
+    );
+  }
+
   return (
     <button
-  onClick={handleOrder}
-  className={
-    compact
-      ? "inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-xs font-semibold text-white hover:bg-green-700 transition"
-      : "flex w-full lg:w-auto items-center justify-center gap-3 rounded-lg bg-green-600 px-6 py-3 font-semibold text-white hover:bg-green-700 transition"
-  }
->
-  <FaWhatsapp className={compact ? "h-4 w-4" : "h-6 w-6"} />
+      onClick={handleOrder}
+      className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-emerald-600/25 transition-all duration-300 hover:from-emerald-500 hover:to-green-500 hover:shadow-xl hover:shadow-emerald-600/35 active:scale-[0.99]"
+    >
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:scale-110">
+        <FaWhatsapp className="h-5 w-5 text-white" />
+      </div>
 
-  {compact ? "Shop Now" : "Order via WhatsApp"}
-</button>
+      <div className="text-left">
+        <span className="block text-base sm:text-lg font-bold leading-tight">
+          Order via WhatsApp
+        </span>
+        <span className="block text-[11px] font-normal text-emerald-100/90">
+          Chat directly with us • Instant order confirmation
+        </span>
+      </div>
+    </button>
   );
 }
