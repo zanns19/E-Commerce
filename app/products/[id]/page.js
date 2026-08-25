@@ -11,6 +11,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import FacebookLike from "@/components/FacebookLike";
 import FacebookComments from "@/components/FacebookComments";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProductPage({ params }) {
   
   await connectDB();

@@ -2,6 +2,8 @@ import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
 import DiscountGrid from "@/components/discount/DiscountGrid";
 
+export const dynamic = "force-dynamic";
+
 export default async function DiscountPage() {
   await connectDB();
 

@@ -35,12 +35,28 @@ export default function ProductInfo({ product }) {
 
       </div>
 
-      {/* Price */}
-      {/* <div>
-        <h2 className="text-4xl font-bold text-green-700">
-          Rs. {product.price}
-        </h2>
-      </div> */}
+      {/* Price & Category */}
+      <div className="flex flex-wrap items-center gap-4">
+        <div>
+          <span className="text-sm font-medium text-gray-500 block">Unit Price</span>
+          <div className="flex items-baseline gap-3">
+            <h2 className="text-3xl sm:text-4xl font-bold text-green-700">
+              Rs. {Number(product.price).toLocaleString()}
+            </h2>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <span className="text-lg text-red-500 line-through">
+                Rs. {Number(product.originalPrice).toLocaleString()}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {product.category && (
+          <span className="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-800">
+            {product.category}
+          </span>
+        )}
+      </div>
 
     </div>
   );
