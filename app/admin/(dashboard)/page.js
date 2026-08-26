@@ -1,5 +1,15 @@
 import Link from "next/link";
-import { Package, Inbox, AlertCircle, ArrowRight } from "lucide-react";
+import {
+  Package,
+  Inbox,
+  AlertCircle,
+  ArrowRight,
+  Plus,
+  ExternalLink,
+  Clock,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import dbConnect from "@/lib/mongodb";
 import Product from "@/models/Product";
 import Inquiry from "@/models/Inquiry";
@@ -31,54 +41,82 @@ export default async function AdminDashboardPage() {
 
   const cards = [
     {
-      label: "Products & Services",
+      label: "Products in Catalog",
       value: totalProducts,
       icon: Package,
-      accent: "text-electric-dark",
-      iconBg: "bg-electric/10",
-      ring: "ring-electric/15",
+      gradient: "from-sky-500 to-blue-600",
+      bgLight: "bg-sky-50 text-sky-600 border-sky-100",
       href: "/admin/products",
+      subtitle: "Active appliances & fittings",
     },
     {
-      label: "Total Inquiries",
+      label: "Total Customer Inquiries",
       value: totalInquiries,
       icon: Inbox,
-      accent: "text-gas-dark",
-      iconBg: "bg-gas/10",
-      ring: "ring-gas/15",
+      gradient: "from-emerald-500 to-teal-600",
+      bgLight: "bg-emerald-50 text-emerald-600 border-emerald-100",
       href: "/admin/inquiries",
+      subtitle: "All-time contact messages",
     },
     {
-      label: "New / Unread",
+      label: "New / Action Required",
       value: newInquiries,
       icon: AlertCircle,
-      accent: "text-danger",
-      iconBg: "bg-danger/10",
-      ring: "ring-danger/15",
+      gradient: "from-rose-500 to-red-600",
+      bgLight: "bg-rose-50 text-rose-600 border-rose-100",
       href: "/admin/inquiries?status=new",
+      subtitle: "Unread customer requests",
     },
   ];
 
   return (
-    <div>
-      {/* Header */}
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-400">
-          Overview
-        </p>
+    <div className="space-y-8 animate-fade-scale">
+      {/* Welcome Banner & Quick Actions */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm">
+        <div>
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-bold text-sky-700 border border-sky-100 mb-2">
+            <Sparkles className="h-3 w-3" />
+            <span>Store Control Center</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            Dashboard Overview
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Monitor appliances, track catalog items, and respond to incoming customer inquiries.
+          </p>
+        </div>
 
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink">
-          Dashboard
-        </h1>
+        {/* Quick Action Shortcuts */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Link
+            href="/admin/products/new"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-sky-600 px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md shadow-sky-600/20 transition-all hover:bg-sky-500 active:scale-95"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Product</span>
+          </Link>
 
-        <p className="mt-1 max-w-xl text-sm text-ink-500">
-          Monitor your products, services, and customer inquiries from one
-          place.
-        </p>
+          <Link
+            href="/admin/inquiries"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 active:scale-95"
+          >
+            <Inbox className="h-4 w-4 text-slate-500" />
+            <span>Inquiries</span>
+          </Link>
+
+          <Link
+            href="/"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900 active:scale-95"
+          >
+            <ExternalLink className="h-4 w-4 text-slate-400" />
+            <span className="hidden sm:inline">Storefront</span>
+          </Link>
+        </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Modern Metric Cards Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => {
           const Icon = card.icon;
 
@@ -86,43 +124,37 @@ export default async function AdminDashboardPage() {
             <Link
               key={card.label}
               href={card.href}
-              className={`group relative overflow-hidden rounded-xl bg-mist-50 p-5 shadow-sm ring-1 ${card.ring} transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-md`}
+              className="group relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-500/10"
             >
-              {/* Decorative Circle */}
+              {/* Background ambient glow */}
               <div
-                className={`absolute -right-8 -top-8 h-24 w-24 rounded-full ${card.iconBg} opacity-50 transition-transform duration-300 group-hover:scale-125`}
+                className={`pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-gradient-to-br ${card.gradient} opacity-10 blur-xl transition-all duration-300 group-hover:scale-125 group-hover:opacity-20`}
               />
 
               <div className="relative">
-                {/* Card Header */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-9 w-9 items-center justify-center rounded-lg ${card.iconBg} ${card.accent}`}
-                    >
-                      <Icon className="h-4.5 w-4.5" />
-                    </div>
-
-                    <span className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-                      {card.label}
-                    </span>
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-2xl border ${card.bgLight} shadow-xs transition-transform duration-300 group-hover:scale-105`}
+                  >
+                    <Icon className="h-5 w-5" />
                   </div>
 
-                  <ArrowRight
-                    className={`h-4 w-4 ${card.accent} opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100`}
-                  />
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-400 group-hover:text-sky-600 transition-colors">
+                    <span>Manage</span>
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </span>
                 </div>
 
-                {/* Value */}
-                <p className="mt-5 text-3xl font-bold tracking-tight text-ink">
-                  {String(card.value).padStart(2, "0")}
-                </p>
-
-                {/* Bottom Indicator */}
-                <div className="mt-4 h-1 overflow-hidden rounded-full bg-ink-600/5">
-                  <div
-                    className={`h-full w-1/3 rounded-full ${card.iconBg}`}
-                  />
+                <div className="mt-5">
+                  <p className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                    {String(card.value).padStart(2, "0")}
+                  </p>
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-800 mt-1">
+                    {card.label}
+                  </h3>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    {card.subtitle}
+                  </p>
                 </div>
               </div>
             </Link>
@@ -130,90 +162,103 @@ export default async function AdminDashboardPage() {
         })}
       </div>
 
-      {/* Recent Inquiries */}
-      <section className="mt-8 overflow-hidden rounded-xl bg-mist-50 shadow-sm ring-1 ring-ink-600/10">
-        {/* Section Header */}
-        <div className="flex flex-col gap-3 border-b border-ink-600/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Recent Inquiries List Card */}
+      <section className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
+        {/* Card Header */}
+        <div className="flex flex-col gap-3 border-b border-slate-100 p-5 sm:p-6 sm:flex-row sm:items-center sm:justify-between bg-slate-50/40">
           <div>
-            <h2 className="text-base font-semibold text-ink">
-              Recent Inquiries
-            </h2>
-
-            <p className="mt-0.5 text-xs text-ink-400">
-              Latest customer requests received
+            <div className="flex items-center gap-2">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                Recent Customer Inquiries
+              </h2>
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600">
+                {recentInquiries.length}
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Messages and quotes requested via public website contact forms
             </p>
           </div>
 
           <Link
             href="/admin/inquiries"
-            className="group flex w-fit items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-electric-dark transition-colors hover:bg-electric/5"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:text-sky-600"
           >
-            View all
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            <span>View All Inquiries</span>
+            <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
-        {/* Empty State */}
+        {/* Inquiries Content */}
         {recentInquiries.length === 0 ? (
-          <div className="flex flex-col items-center justify-center px-5 py-14 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white ring-1 ring-ink-600/10">
-              <Inbox className="h-5 w-5 text-ink-400" />
+          <div className="flex flex-col items-center justify-center p-12 sm:p-16 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
+              <Inbox className="h-7 w-7" />
             </div>
-
-            <p className="mt-4 text-sm font-medium text-ink">
-              No inquiries yet
+            <p className="text-base font-bold text-slate-800">
+              No customer inquiries yet
             </p>
-
-            <p className="mt-1 text-xs text-ink-400">
-              Customer inquiries will appear here once received.
+            <p className="text-xs text-slate-500 max-w-sm mt-1">
+              When customers fill out the contact form or request assistance, their messages will appear here.
             </p>
           </div>
         ) : (
-          /* Inquiry List */
-          <ul className="space-y-2 p-2">
-            {recentInquiries.map((inq) => (
-              <li key={inq._id}>
+          <div className="divide-y divide-slate-100">
+            {recentInquiries.map((inq) => {
+              const status = inq.status || "new";
+              const isNew = status === "new";
+              const isProgress = status === "in_progress";
+
+              return (
                 <Link
+                  key={inq._id}
                   href={`/admin/inquiries/${inq._id}`}
-                  className="group flex items-center justify-between gap-4 rounded-lg bg-white px-4 py-3.5 ring-1 ring-ink-600/5 transition-all duration-200 hover:bg-mist-100 hover:ring-ink-600/10"
+                  className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 transition-colors hover:bg-slate-50/80"
                 >
-                  {/* Customer Information */}
-                  <div className="flex min-w-0 items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink/5 text-sm font-semibold uppercase text-ink-600">
-                      {inq.name?.charAt(0)}
+                  <div className="flex items-start gap-3.5 min-w-0">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-sky-600 to-blue-600 font-bold text-sm text-white shadow-xs">
+                      {inq.name?.charAt(0)?.toUpperCase() || "C"}
                     </div>
 
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-ink">
-                        {inq.name}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="truncate text-sm font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
+                          {inq.name}
+                        </p>
+                        <span
+                          className={`rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${
+                            isNew
+                              ? "bg-rose-50 text-rose-700 ring-1 ring-rose-200"
+                              : isProgress
+                              ? "bg-sky-50 text-sky-700 ring-1 ring-sky-200"
+                              : "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                          }`}
+                        >
+                          {status.replace("_", " ")}
+                        </span>
+                      </div>
 
-                      <p className="mt-0.5 truncate text-xs text-ink-500">
-                        {inq.email}
+                      <p className="truncate text-xs text-slate-500 mt-0.5">
+                        {inq.email} • <span className="text-slate-700">{inq.message}</span>
                       </p>
                     </div>
                   </div>
 
-                  {/* Status */}
-                  <div className="flex shrink-0 items-center gap-3">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${
-                        inq.status === "new"
-                          ? "bg-danger/10 text-danger"
-                          : inq.status === "in_progress"
-                          ? "bg-electric/10 text-electric-dark"
-                          : "bg-ok/10 text-ok"
-                      }`}
-                    >
-                      {inq.status.replace("_", " ")}
+                  <div className="flex items-center justify-between sm:justify-end gap-3 pl-13 sm:pl-0 shrink-0">
+                    <span className="flex items-center gap-1 text-[11px] font-medium text-slate-400">
+                      <Clock className="h-3 w-3" />
+                      {new Date(inq.createdAt).toLocaleDateString()}
                     </span>
 
-                    <ArrowRight className="hidden h-4 w-4 text-ink-300 transition-transform group-hover:translate-x-0.5 sm:block" />
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-400 group-hover:text-sky-600 transition-colors">
+                      <span className="hidden sm:inline">Review</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </div>
                 </Link>
-              </li>
-            ))}
-          </ul>
+              );
+            })}
+          </div>
         )}
       </section>
     </div>

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Zap, Flame, Lock, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Zap, Flame, Lock, Loader2, ArrowLeft, ShieldCheck } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function AdminLoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Invalid email or password.");
+        setError(data.error || "Invalid email or password credentials.");
         return;
       }
 
@@ -44,9 +45,8 @@ export default function AdminLoginPage() {
       router.refresh();
     } catch (err) {
       console.error("Login error:", err);
-
       setError(
-        "Couldn't reach the server. Please check your connection and try again."
+        "Couldn't reach the authentication server. Please check your connection."
       );
     } finally {
       setLoading(false);
@@ -54,63 +54,70 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-5 py-10">
-      {/* Background */}
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-12">
+      {/* Ambient Lighting Gradients */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.12),transparent_45%)]" />
-
-        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/5 blur-3xl" />
+        <div className="absolute left-1/2 top-1/4 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-500/15 blur-3xl" />
+        <div className="absolute right-1/4 bottom-1/4 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
       </div>
 
-      {/* Login content */}
-      <section className="relative z-10 w-full max-w-sm">
-        {/* Logo / Brand */}
+      {/* Login Container */}
+      <section className="relative z-10 w-full max-w-md animate-fade-scale">
+        {/* Back to store link */}
+        <div className="mb-6 flex justify-center">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-800 bg-slate-900/80 px-3.5 py-1.5 text-xs font-semibold text-slate-400 backdrop-blur-md transition hover:border-slate-700 hover:text-white"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Back to Storefront</span>
+          </Link>
+        </div>
+
+        {/* Brand Header */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-slate-700 bg-slate-900 shadow-xl">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-700/60 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 shadow-2xl shadow-sky-500/10">
             <div className="relative h-8 w-8">
               <Zap
-                className="absolute left-0 top-0 h-6 w-6 text-blue-400"
+                className="absolute left-0 top-0 h-6 w-6 text-sky-400 drop-shadow-md"
                 strokeWidth={2.5}
               />
-
               <Flame
-                className="absolute bottom-0 right-0 h-6 w-6 text-orange-400"
+                className="absolute bottom-0 right-0 h-6 w-6 text-amber-400 drop-shadow-md"
                 strokeWidth={2.5}
               />
             </div>
           </div>
 
-          <h1 className="text-xl font-bold tracking-tight text-white">
-            Ahmad
-            <span className="text-blue-400">Electro</span>
-            <span className="text-orange-400">Gas</span>
+          <h1 className="text-2xl font-black tracking-tight text-white">
+            Ahmad<span className="text-sky-400">Electro</span>
+            <span className="text-emerald-400">Gas</span>
           </h1>
 
-          <p className="mt-1 text-sm text-slate-400">
-            Administrator portal
+          <p className="mt-1 text-xs sm:text-sm text-slate-400">
+            Store Administrator Control Center
           </p>
         </div>
 
-        {/* Card */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
+        {/* Glassmorphic Login Card */}
+        <div className="rounded-3xl border border-slate-800/80 bg-slate-900/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-white">
-              Sign in to admin panel
+            <h2 className="text-lg font-bold text-white">
+              Administrator Sign In
             </h2>
-
-            <p className="mt-1 text-sm text-slate-400">
-              Enter your administrator credentials.
+            <p className="mt-1 text-xs text-slate-400">
+              Enter your authorized email and password to access the panel.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            {/* Email */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Input */}
             <div>
               <label
                 htmlFor="email"
-                className="block text-xs font-medium uppercase tracking-wide text-slate-400"
+                className="block text-xs font-bold uppercase tracking-wider text-slate-300"
               >
-                Email
+                Email Address
               </label>
 
               <input
@@ -123,15 +130,15 @@ export default function AdminLoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
                 placeholder="admin@ahmadelectrogas.com"
-                className="mt-2 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-1.5 block w-full rounded-xl border border-slate-700/80 bg-slate-950 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 disabled:opacity-50"
               />
             </div>
 
-            {/* Password */}
-            <div className="mt-5">
+            {/* Password Input */}
+            <div>
               <label
                 htmlFor="password"
-                className="block text-xs font-medium uppercase tracking-wide text-slate-400"
+                className="block text-xs font-bold uppercase tracking-wider text-slate-300"
               >
                 Password
               </label>
@@ -146,42 +153,43 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
                 placeholder="••••••••"
-                className="mt-2 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-1.5 block w-full rounded-xl border border-slate-700/80 bg-slate-950 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 disabled:opacity-50"
               />
             </div>
 
-            {/* Error */}
+            {/* Error Banner */}
             {error && (
-              <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-3">
-                <p className="text-sm text-red-400">{error}</p>
+              <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3.5 text-xs font-semibold text-rose-300">
+                {error}
               </div>
             )}
 
-            {/* Button */}
+            {/* Sign In Button */}
             <button
               type="submit"
               disabled={loading}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-blue-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-sky-600/25 transition hover:from-sky-500 hover:to-blue-500 active:scale-95 disabled:opacity-50"
             >
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Signing in...
+                  <span>Verifying Credentials...</span>
                 </>
               ) : (
                 <>
                   <Lock className="h-4 w-4" />
-                  Sign in
+                  <span>Sign In to Dashboard</span>
                 </>
               )}
             </button>
           </form>
         </div>
 
-        {/* Footer */}
-        <p className="mt-6 text-center text-xs text-slate-500">
-          Restricted access — administrators only.
-        </p>
+        {/* Security Footer Notice */}
+        <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-slate-500">
+          <ShieldCheck className="h-4 w-4 text-slate-400" />
+          <span>Authorized personnel access only • Session secured</span>
+        </div>
       </section>
     </main>
   );

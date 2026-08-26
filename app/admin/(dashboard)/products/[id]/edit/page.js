@@ -15,27 +15,21 @@ export default async function EditProductPage({ params }) {
   }
 
   return (
-    <div>
-      <h1 className="text-xl font-bold tracking-tight text-ink">Edit product</h1>
-      <p className="mt-1 text-sm text-ink-500">{product.product_name}</p>
-
-      <div className="mt-6">
-        <ProductForm
-          productId={id}
-          initialData={{
-            product_name: product.product_name,
-            category: product.category,
-            desc: product.desc,
-            price: product.price,
-            originalPrice: product.originalPrice,
-            discount: product.discount,
-            rating: product.rating,
-            image: product.image,
-            stock: product.stock,
-            featured: product.featured,
-          }}
-        />
-      </div>
-    </div>
+    <ProductForm
+      productId={id}
+      initialData={{
+        product_name: product.product_name,
+        category: product.category,
+        desc: product.desc,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        discount: product.discount,
+        rating: product.rating,
+        image: product.image,
+        stock: product.stock,
+        featured: product.featured,
+      }}
+    />
   );
 }
+
