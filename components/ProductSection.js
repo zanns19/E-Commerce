@@ -14,17 +14,11 @@ export default function ProductSection({ products = [] }) {
         CAMPING STOVES
       </h2>
 
-      <div className="mt-1 grid grid-cols-2 gap-x-2 gap-y-8 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-10 xl:gap-x-14">
+      <div className="mt-1 grid grid-cols-2 gap-3.5 sm:gap-4 xl:gap-6">
         {displayProducts.map((product, index) => (
           <ProductCard
-            key={index}
+            key={product._id || index}
             product={product}
-            badge={index === 0 ? "In Stock" : "New"}
-            badgeColor={
-              index === 0
-                ? "bg-green-200 text-green-700"
-                : "bg-blue-200 text-blue-700"
-            }
           />
         ))}
       </div>

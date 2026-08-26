@@ -102,18 +102,12 @@ export default function CategorySection({ title, products = [] }) {
         </Link>
       </div>
 
-      {/* Product Grid (Exact same ProductCard component & props) */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 xl:gap-x-8">
+      {/* Product Grid */}
+      <div className="grid grid-cols-2 gap-3.5 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
         {products.map((product) => (
           <ProductCard
             key={product._id}
             product={product}
-            badge={product.stock > 0 ? "In Stock" : "Out of Stock"}
-            badgeColor={
-              product.stock > 0
-                ? "bg-green-200 text-green-700"
-                : "bg-red-200 text-red-700"
-            }
             variant={product.category === "Discount" ? "discount" : "default"}
           />
         ))}

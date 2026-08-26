@@ -1,34 +1,44 @@
 "use client";
 import { FaWhatsapp } from "react-icons/fa";
 
-export default function WhatsAppButton({ product, compact = false }) {
-  const handleOrder = () => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || {};
+export default function WhatsAppButton({
+  product,
+  compact = false,
+  label = "Shop Now",
+  className = "",
+}) {
+  const handleOrder = (e) => {
+    e?.stopPropagation?.();
 
-    const quantity = cart[product._id] || 1;
-
-    if (quantity < 1) {
-      alert("Please select at least one quantity.");
-      return;
+    let quantity = 1;
+    if (typeof window !== "undefined") {
+      try {
+        const cart = JSON.parse(localStorage.getItem("cart")) || {};
+        quantity = cart[product?._id] || 1;
+      } catch {
+        quantity = 1;
+      }
     }
 
-    const total = quantity * product.price;
+    if (quantity < 1) quantity = 1;
 
-    const message = `Assalam-o-Alaikum!
-    
-I want to order the following product:
+    const unitPrice = product?.price ? Number(product.price) : 0;
+    const total = quantity * unitPrice;
 
-🛒 Product: ${product.product_name}
+    const message = `Assalam-o-Alaikum Ahmad ElectroGas!
+
+I want to order the following appliance:
+
+🛒 Product: ${product?.product_name || "Appliance"}
 📦 Quantity: ${quantity}
-💰 Price: Rs. ${product.price}
-💵 Total: Rs. ${total}
+💰 Unit Price: Rs. ${unitPrice.toLocaleString()}
+💵 Total: Rs. ${total.toLocaleString()}
 
-Please confirm its availability.
+Please confirm availability and delivery dispatch details.
 
-Thank you.`;
+Thank you!`;
 
     const phone = "923356599132";
-
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
       message
     )}`;
@@ -39,19 +49,22 @@ Thank you.`;
   if (compact) {
     return (
       <button
+        type="button"
         onClick={handleOrder}
-        className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition-all duration-200 hover:bg-emerald-700 hover:shadow-md active:scale-95"
+        className={`inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-xs transition-all duration-200 hover:bg-emerald-500 hover:shadow-md hover:shadow-emerald-600/20 active:scale-95 shrink-0 ${className}`}
+        title="Order via WhatsApp"
       >
-        <FaWhatsapp className="h-4 w-4" />
-        <span>Shop Now</span>
+        <FaWhatsapp className="h-3.5 w-3.5 shrink-0" />
+        <span>{label}</span>
       </button>
     );
   }
 
   return (
     <button
+      type="button"
       onClick={handleOrder}
-      className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-emerald-600/25 transition-all duration-300 hover:from-emerald-500 hover:to-green-500 hover:shadow-xl hover:shadow-emerald-600/35 active:scale-[0.99]"
+      className={`group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-emerald-600/25 transition-all duration-300 hover:from-emerald-500 hover:to-green-500 hover:shadow-xl hover:shadow-emerald-600/35 active:scale-[0.99] ${className}`}
     >
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:scale-110">
         <FaWhatsapp className="h-5 w-5 text-white" />
