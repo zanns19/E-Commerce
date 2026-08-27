@@ -51,10 +51,10 @@ Thank you!`;
       <button
         type="button"
         onClick={handleOrder}
-        className={`inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-xs transition-all duration-200 hover:bg-emerald-500 hover:shadow-md hover:shadow-emerald-600/20 active:scale-95 shrink-0 ${className}`}
+        className={`inline-flex items-center justify-center gap-1 sm:gap-1.5 rounded-lg sm:rounded-xl bg-emerald-600 px-2 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-white shadow-xs transition-all duration-200 hover:bg-emerald-500 hover:shadow-md hover:shadow-emerald-600/20 active:scale-95 shrink-0 min-h-[32px] sm:min-h-[36px] ${className}`}
         title="Order via WhatsApp"
       >
-        <FaWhatsapp className="h-3.5 w-3.5 shrink-0" />
+        <FaWhatsapp className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
         <span>{label}</span>
       </button>
     );

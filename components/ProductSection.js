@@ -10,11 +10,11 @@ export default function ProductSection({ products = [] }) {
 
   return (
     <div className="w-full lg:w-1/2">
-      <h2 className="mb-4 border-b-8 border-cyan-400 py-2 text-center text-3xl font-bold uppercase tracking-wide text-cyan-600 sm:text-4xl">
+      <h2 className="mb-4 border-b-8 border-cyan-400 py-2 text-center text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wide text-cyan-600">
         CAMPING STOVES
       </h2>
 
-      <div className="mt-1 grid grid-cols-2 gap-3.5 sm:gap-4 xl:gap-6">
+      <div className="mt-1 grid grid-cols-2 gap-2.5 sm:gap-4 xl:gap-6">
         {displayProducts.map((product, index) => (
           <ProductCard
             key={product._id || index}

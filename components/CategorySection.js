@@ -70,27 +70,27 @@ export default function CategorySection({ title, products = [] }) {
   return (
     <section
       id={sectionId}
-      className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 scroll-mt-24"
+      className="mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 py-6 sm:py-8 scroll-mt-24"
     >
       {/* Category Section Header */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 pb-4">
+      <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-slate-200/80 pb-3.5 sm:pb-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
-              <IconComponent className="h-5 w-5" />
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-sky-100 text-sky-600 shrink-0">
+              <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900">
+              <h2 className="text-lg sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900">
                 {title}
               </h2>
               <span
-                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ${meta.badgeBg}`}
+                className={`inline-flex items-center rounded-full px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-xs font-semibold ring-1 ${meta.badgeBg}`}
               >
                 {products.length} {products.length === 1 ? "Item" : "Items"}
               </span>
             </div>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500">{meta.tagline}</p>
+          <p className="text-[11px] sm:text-sm text-slate-500">{meta.tagline}</p>
         </div>
 
         <Link
@@ -103,7 +103,7 @@ export default function CategorySection({ title, products = [] }) {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 gap-3.5 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
         {products.map((product) => (
           <ProductCard
             key={product._id}

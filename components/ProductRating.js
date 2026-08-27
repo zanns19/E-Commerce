@@ -3,7 +3,7 @@ export default function ProductRating({ rating = 5 }) {
 
   return (
     <div
-      className="flex items-center gap-0.5"
+      className="flex items-center gap-0.5 shrink-0"
       aria-label={`Rating: ${numRating} out of 5 stars`}
     >
       {Array.from({ length: 5 }).map((_, index) => {
@@ -17,7 +17,7 @@ export default function ProductRating({ rating = 5 }) {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className={`h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 ${
+            className={`h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5 shrink-0 ${
               isFilled
                 ? "text-amber-400"
                 : isHalf
