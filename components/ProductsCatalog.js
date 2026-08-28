@@ -3,25 +3,27 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Search, X, Filter, RotateCcw } from "lucide-react";
 import CategorySection from "./CategorySection";
-
-const CATEGORY_ORDER = [
-  "Kitchen",
-  "Instant Gyser",
-  "Regulator",
-  "Valves",
-  "Accessories",
-  "Discount",
-];
+import { CATEGORIES, KITCHEN_SUBCATEGORIES } from "@/lib/categories";
 
 export default function ProductsCatalog({ initialProducts = [] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("all");
   const searchInputRef = useRef(null);
 
-  // Auto-focus search input when requested via URL query (?focus=search) or custom event
+  // Auto-focus search input or initialize category from URL query (?category=... or ?focus=search)
   useEffect(() => {
     const checkAndFocus = () => {
       const params = new URLSearchParams(window.location.search);
+      const catParam = params.get("category");
+      if (catParam && CATEGORIES.includes(catParam)) {
+        setSelectedCategory(catParam);
+      }
+      const subParam = params.get("subCategory");
+      if (subParam) {
+        setSelectedSubCategory(subParam);
+      }
+
       if (params.get("focus") === "search") {
         setTimeout(() => {
           if (searchInputRef.current) {
@@ -56,32 +58,42 @@ export default function ProductsCatalog({ initialProducts = [] }) {
   // Calculate product counts per category
   const categoryCounts = useMemo(() => {
     const counts = { all: initialProducts.length };
-    CATEGORY_ORDER.forEach((cat) => {
+    CATEGORIES.forEach((cat) => {
       counts[cat] = initialProducts.filter((p) => p.category === cat).length;
     });
     return counts;
   }, [initialProducts]);
 
-  // Filter products based on search query and category
+  // Filter products based on search query, category, and subcategory
   const filteredProducts = useMemo(() => {
     return initialProducts.filter((product) => {
       const matchesCategory =
         selectedCategory === "all" || product.category === selectedCategory;
 
+      const matchesSubCategory =
+        selectedCategory !== "Kitchen" ||
+        selectedSubCategory === "all" ||
+        product.subCategory === selectedSubCategory;
+
       const query = searchQuery.trim().toLowerCase();
-      if (!query) return matchesCategory;
+      if (!query) return matchesCategory && matchesSubCategory;
 
       const nameMatch = product.product_name?.toLowerCase().includes(query);
       const descMatch = product.desc?.toLowerCase().includes(query);
+      const subMatch = product.subCategory?.toLowerCase().includes(query);
 
-      return matchesCategory && (nameMatch || descMatch);
+      return (
+        matchesCategory &&
+        matchesSubCategory &&
+        (nameMatch || descMatch || subMatch)
+      );
     });
-  }, [initialProducts, selectedCategory, searchQuery]);
+  }, [initialProducts, selectedCategory, selectedSubCategory, searchQuery]);
 
-  // Group filtered products by category according to CATEGORY_ORDER
+  // Group filtered products by category according to CATEGORIES
   const groupedProducts = useMemo(() => {
     const categoriesToGroup =
-      selectedCategory === "all" ? CATEGORY_ORDER : [selectedCategory];
+      selectedCategory === "all" ? CATEGORIES : [selectedCategory];
 
     return categoriesToGroup
       .map((category) => ({
@@ -94,9 +106,13 @@ export default function ProductsCatalog({ initialProducts = [] }) {
   const handleReset = () => {
     setSearchQuery("");
     setSelectedCategory("all");
+    setSelectedSubCategory("all");
   };
 
-  const isFiltering = searchQuery.trim() !== "" || selectedCategory !== "all";
+  const isFiltering =
+    searchQuery.trim() !== "" ||
+    selectedCategory !== "all" ||
+    selectedSubCategory !== "all";
 
   return (
     <div className="w-full pb-16">
@@ -142,7 +158,10 @@ export default function ProductsCatalog({ initialProducts = [] }) {
             <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 scrollbar-none sm:flex-wrap sm:justify-center">
               <button
                 type="button"
-                onClick={() => setSelectedCategory("all")}
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setSelectedSubCategory("all");
+                }}
                 className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold transition sm:text-sm ${
                   selectedCategory === "all"
                     ? "bg-sky-600 text-white shadow-sm"
@@ -161,7 +180,7 @@ export default function ProductsCatalog({ initialProducts = [] }) {
                 </span>
               </button>
 
-              {CATEGORY_ORDER.map((category) => {
+              {CATEGORIES.map((category) => {
                 const count = categoryCounts[category] || 0;
                 const isSelected = selectedCategory === category;
 
@@ -169,7 +188,10 @@ export default function ProductsCatalog({ initialProducts = [] }) {
                   <button
                     key={category}
                     type="button"
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => {
+                      setSelectedCategory(category);
+                      setSelectedSubCategory("all");
+                    }}
                     className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold transition sm:text-sm ${
                       isSelected
                         ? "bg-sky-600 text-white shadow-sm"
@@ -190,6 +212,56 @@ export default function ProductsCatalog({ initialProducts = [] }) {
                 );
               })}
             </div>
+
+            {/* Kitchen Subcategory Filter Chips */}
+            {selectedCategory === "Kitchen" && KITCHEN_SUBCATEGORIES.length > 0 && (
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-2 scrollbar-none sm:flex-wrap sm:justify-center border-t border-sky-100">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 pl-1 shrink-0">
+                  Kitchen Types:
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSubCategory("all")}
+                  className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold transition ${
+                    selectedSubCategory === "all"
+                      ? "bg-slate-900 text-white shadow-xs"
+                      : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  <span>All Types</span>
+                </button>
+                {KITCHEN_SUBCATEGORIES.map((sub) => {
+                  const isSubSelected = selectedSubCategory === sub;
+                  const subCount = initialProducts.filter(
+                    (p) => p.category === "Kitchen" && p.subCategory === sub
+                  ).length;
+
+                  return (
+                    <button
+                      key={sub}
+                      type="button"
+                      onClick={() => setSelectedSubCategory(sub)}
+                      className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition ${
+                        isSubSelected
+                          ? "bg-sky-600 text-white shadow-xs"
+                          : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+                      }`}
+                    >
+                      <span>{sub}</span>
+                      <span
+                        className={`rounded-full px-1.5 py-0.2 text-[10px] ${
+                          isSubSelected
+                            ? "bg-white/20 text-white"
+                            : "bg-slate-100 text-slate-500"
+                        }`}
+                      >
+                        {subCount}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Results stats and Reset button */}

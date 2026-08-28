@@ -17,14 +17,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-const CATEGORY_OPTIONS = [
-  "Kitchen",
-  "Instant Gyser",
-  "Regulator",
-  "Valves",
-  "Accessories",
-  "Discount",
-];
+import { CATEGORIES, getSubcategoriesForCategory } from "@/lib/categories";
 
 export default function ProductForm({ initialData, productId }) {
   const router = useRouter();
@@ -32,7 +25,8 @@ export default function ProductForm({ initialData, productId }) {
 
   const [form, setForm] = useState({
     product_name: initialData?.product_name || "",
-    category: initialData?.category || CATEGORY_OPTIONS[0],
+    category: initialData?.category || CATEGORIES[0],
+    subCategory: initialData?.subCategory || "",
     desc: initialData?.desc || "",
     price: initialData?.price ?? "",
     originalPrice: initialData?.originalPrice ?? "",
@@ -45,6 +39,8 @@ export default function ProductForm({ initialData, productId }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const availableSubcategories = getSubcategoriesForCategory(form.category);
+
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
   }
@@ -56,6 +52,7 @@ export default function ProductForm({ initialData, productId }) {
 
     const payload = {
       ...form,
+      subCategory: availableSubcategories.length > 0 ? form.subCategory : "",
       price: form.price === "" ? 0 : Number(form.price),
       originalPrice:
         form.originalPrice === "" ? null : Number(form.originalPrice),
@@ -155,10 +152,18 @@ export default function ProductForm({ initialData, productId }) {
                 <select
                   required
                   value={form.category}
-                  onChange={(e) => update("category", e.target.value)}
+                  onChange={(e) => {
+                    const newCat = e.target.value;
+                    const subcats = getSubcategoriesForCategory(newCat);
+                    setForm((f) => ({
+                      ...f,
+                      category: newCat,
+                      subCategory: subcats.includes(f.subCategory) ? f.subCategory : "",
+                    }));
+                  }}
                   className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-500/20 font-semibold"
                 >
-                  {CATEGORY_OPTIONS.map((c) => (
+                  {CATEGORIES.map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
@@ -181,6 +186,29 @@ export default function ProductForm({ initialData, productId }) {
                 />
               </div>
             </div>
+
+            {availableSubcategories.length > 0 && (
+              <div className="rounded-2xl border border-sky-100 bg-sky-50/40 p-4 transition-all">
+                <label className="block text-xs font-bold uppercase tracking-wider text-sky-800">
+                  {form.category} Product Type / Subcategory
+                </label>
+                <select
+                  value={form.subCategory || ""}
+                  onChange={(e) => update("subCategory", e.target.value)}
+                  className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
+                >
+                  <option value="">Select {form.category} Type (Optional)</option>
+                  {availableSubcategories.map((sub) => (
+                    <option key={sub} value={sub}>
+                      {sub}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-[11px] text-sky-600">
+                  Specify the type (e.g. Hood, Built in HOB, Stove, Built-in Stove) for better filtering in store catalog.
+                </p>
+              </div>
+            )}
 
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
@@ -378,7 +406,9 @@ export default function ProductForm({ initialData, productId }) {
               {/* Badges */}
               <div className="absolute top-2.5 left-2.5 z-10">
                 <span className="inline-flex items-center rounded-lg bg-white/90 px-2.5 py-0.5 text-[10px] font-semibold text-slate-700 shadow-xs backdrop-blur-md border border-slate-200/60">
-                  {form.category || "Appliance"}
+                  {form.subCategory
+                    ? `${form.category} • ${form.subCategory}`
+                    : form.category || "Appliance"}
                 </span>
               </div>
 

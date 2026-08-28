@@ -24,7 +24,9 @@ export default function ProductCard({
       ? numOriginalPrice - price
       : null;
 
-  const categoryName = product.category || "Appliance";
+  const categoryName = product.subCategory
+    ? `${product.category} • ${product.subCategory}`
+    : product.category || "Appliance";
 
   return (
     <div className="group relative flex flex-col justify-between h-full overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-500/10 dark:border-slate-800 dark:bg-slate-900">

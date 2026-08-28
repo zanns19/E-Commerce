@@ -3,6 +3,7 @@ import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
 import HeroCarousel from "@/components/HeroCarousel";
 import CategorySection from "@/components/CategorySection";
+import { CATEGORIES } from "@/lib/categories";
 import {
   Truck,
   ShieldCheck,
@@ -19,17 +20,9 @@ import {
   Play,
   CheckCircle2,
   Phone,
+  Tent,
 } from "lucide-react";
 import { FaWhatsapp, FaFacebook } from "react-icons/fa";
-
-const CATEGORY_ORDER = [
-  "Kitchen",
-  "Instant Gyser",
-  "Regulator",
-  "Valves",
-  "Accessories",
-  "Discount",
-];
 
 const TRUST_FEATURES = [
   {
@@ -55,12 +48,23 @@ const TRUST_FEATURES = [
 ];
 
 const CATEGORY_PILLS = [
+  { name: "Discount", icon: Percent, href: "#category-discount" },
   { name: "Kitchen", icon: Utensils, href: "#category-kitchen" },
+  { name: "Camping Stoves", icon: Tent, href: "#category-camping-stoves" },
   { name: "Instant Gyser", icon: Flame, href: "#category-instant-gyser" },
   { name: "Regulator", icon: Gauge, href: "#category-regulator" },
   { name: "Valves", icon: Sliders, href: "#category-valves" },
   { name: "Accessories", icon: Layers, href: "#category-accessories" },
-  { name: "Discount", icon: Percent, href: "#category-discount" },
+];
+
+const HOMEPAGE_CATEGORIES_CONFIG = [
+  { category: "Discount", limit: 4 },
+  { category: "Kitchen", limit: 2 },
+  { category: "Camping Stoves", limit: 2 },
+  // { category: "Instant Gyser", limit: 4 },
+  // { category: "Regulator", limit: 4 },
+  // { category: "Valves", limit: 4 },
+  // { category: "Accessories", limit: 4 },
 ];
 
 export const dynamic = "force-dynamic";
@@ -78,11 +82,36 @@ export default async function Home() {
     _id: product._id.toString(),
   }));
 
-  // Group products by category, keeping the schema's category order.
-  const grouped = CATEGORY_ORDER.map((category) => ({
-    category,
-    products: formattedProducts.filter((p) => p.category === category),
-  })).filter((group) => group.products.length > 0);
+  const discountProducts = formattedProducts
+    .filter((p) => p.category === "Discount")
+    .slice(0, 4);
+
+  const kitchenProducts = formattedProducts
+    .filter((p) => p.category === "Kitchen")
+    .slice(0, 2);
+
+  const campingProducts = formattedProducts
+    .filter((p) => p.category === "Camping Stoves")
+    .slice(0, 2);
+
+  // Remaining categories from config (excluding Discount, Kitchen, Camping Stoves)
+  const remainingGroups = HOMEPAGE_CATEGORIES_CONFIG
+    .filter(
+      (c) =>
+        c.category !== "Discount" &&
+        c.category !== "Kitchen" &&
+        c.category !== "Camping Stoves"
+    )
+    .map(({ category, limit }) => ({
+      category,
+      products: formattedProducts
+        .filter((p) => p.category === category)
+        .slice(0, limit),
+    }))
+    .filter((g) => g.products.length > 0);
+
+  const hasPairedKitchenCamping =
+    kitchenProducts.length > 0 || campingProducts.length > 0;
 
   return (
     <main className="min-h-screen bg-slate-50/50 pb-16">
@@ -150,57 +179,86 @@ export default async function Home() {
 
       {/* 4. Product Categories Sections */}
       <div className="space-y-6 sm:space-y-10 mt-6">
-        {grouped.map((group, index) => (
+        {/* Section 1: Discount Products (4 items) */}
+        {discountProducts.length > 0 && (
+          <CategorySection
+            title="Discount"
+            products={discountProducts}
+          />
+        )}
+
+        {/* Section 2: Combined Row for Kitchen (2 items) & Camping Stoves (2 items) */}
+        {hasPairedKitchenCamping && (
+          <div className="mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
+              {kitchenProducts.length > 0 && (
+                <CategorySection
+                  title="Kitchen"
+                  products={kitchenProducts}
+                  isHalfWidth
+                />
+              )}
+              {campingProducts.length > 0 && (
+                <CategorySection
+                  title="Camping Stoves"
+                  products={campingProducts}
+                  isHalfWidth
+                />
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Middle Seasonal Promo Banner */}
+        <section className="mx-auto my-8 sm:my-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-3xl border border-sky-900/20 bg-gradient-to-r from-[#071724] via-[#0B2540] to-[#071724] p-6 sm:p-10 text-white shadow-2xl">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-sky-500/20 blur-3xl" />
+            <div className="pointer-events-none absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-500/20 blur-3xl" />
+
+            <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="space-y-2 max-w-2xl">
+                <div className="inline-flex items-center gap-2 rounded-full bg-sky-500/20 border border-sky-400/30 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-sky-300">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>Exclusive Distributor Pricing</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                  Planning a Kitchen Renovation or Heating Upgrade?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Talk with our appliance specialists for bundle discounts on gas geysers, hobs, regulators, and high-flow safety valves.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <a
+                  href="https://wa.me/923356599132?text=Hello%20Ahmad%20ElectroGas,%20I%20want%20a%20bundle%20quote"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-600/30 transition-all hover:bg-emerald-500 active:scale-95"
+                >
+                  <FaWhatsapp className="h-4 w-4" />
+                  <span>Get Instant Quote</span>
+                </a>
+
+                <Link
+                  href="/discount"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-xs sm:text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 active:scale-95"
+                >
+                  <span>View Deals</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: Any Other Categories */}
+        {remainingGroups.map((group) => (
           <div key={group.category}>
             <CategorySection
               title={group.category}
               products={group.products}
             />
-
-            {/* Middle Seasonal Promo Banner after 2nd category */}
-            {index === 1 && (
-              <section className="mx-auto my-8 sm:my-12 max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="relative overflow-hidden rounded-3xl border border-sky-900/20 bg-gradient-to-r from-[#071724] via-[#0B2540] to-[#071724] p-6 sm:p-10 text-white shadow-2xl">
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-sky-500/20 blur-3xl" />
-                  <div className="pointer-events-none absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-500/20 blur-3xl" />
-
-                  <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                    <div className="space-y-2 max-w-2xl">
-                      <div className="inline-flex items-center gap-2 rounded-full bg-sky-500/20 border border-sky-400/30 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-sky-300">
-                        <Sparkles className="h-3.5 w-3.5" />
-                        <span>Exclusive Distributor Pricing</span>
-                      </div>
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-                        Planning a Kitchen Renovation or Heating Upgrade?
-                      </h3>
-                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Talk with our appliance specialists for bundle discounts on gas geysers, hobs, regulators, and high-flow safety valves.
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3 shrink-0">
-                      <a
-                        href="https://wa.me/923356599132?text=Hello%20Ahmad%20ElectroGas,%20I%20want%20a%20bundle%20quote"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-600/30 transition-all hover:bg-emerald-500 active:scale-95"
-                      >
-                        <FaWhatsapp className="h-4 w-4" />
-                        <span>Get Instant Quote</span>
-                      </a>
-
-                      <Link
-                        href="/discount"
-                        className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-xs sm:text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 active:scale-95"
-                      >
-                        <span>View Deals</span>
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
           </div>
         ))}
       </div>

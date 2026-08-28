@@ -9,8 +9,12 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url);
   const category = searchParams.get("category");
+  const subCategory = searchParams.get("subCategory");
 
-  const query = category ? { category } : {};
+  const query = {};
+  if (category) query.category = category;
+  if (subCategory) query.subCategory = subCategory;
+
   const products = await Product.find(query).sort({ createdAt: -1 });
 
   return NextResponse.json({ products });
@@ -28,6 +32,7 @@ export async function POST(request) {
     const {
       product_name,
       category,
+      subCategory,
       desc,
       price,
       originalPrice,
@@ -68,6 +73,7 @@ export async function POST(request) {
     const product = await Product.create({
       product_name,
       category,
+      subCategory: subCategory || "",
       desc,
       price: price || 0,
       originalPrice: originalPrice || null,

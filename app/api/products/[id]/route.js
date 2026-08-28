@@ -31,6 +31,7 @@ export async function PUT(request, { params }) {
       {
         product_name: body.product_name,
         category: body.category,
+        subCategory: body.subCategory !== undefined ? body.subCategory : "",
         desc: body.desc,
         price: body.price,
         originalPrice: body.originalPrice,

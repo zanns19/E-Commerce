@@ -9,6 +9,7 @@ import {
   Percent,
   ArrowRight,
   Sparkles,
+  Tent,
 } from "lucide-react";
 
 const CATEGORY_META = {
@@ -17,6 +18,12 @@ const CATEGORY_META = {
     tagline: "High performance cooking stoves, hoods & kitchen appliances",
     color: "from-sky-500 to-blue-600",
     badgeBg: "bg-sky-50 text-sky-700 ring-sky-100",
+  },
+  "Camping Stoves": {
+    icon: Tent,
+    tagline: "Portable outdoor camping stoves, burners & gas cylinders",
+    color: "from-orange-500 to-amber-600",
+    badgeBg: "bg-orange-50 text-orange-700 ring-orange-100",
   },
   "Instant Gyser": {
     icon: Flame,
@@ -50,7 +57,11 @@ const CATEGORY_META = {
   },
 };
 
-export default function CategorySection({ title, products = [] }) {
+export default function CategorySection({
+  title,
+  products = [],
+  isHalfWidth = false,
+}) {
   if (!products.length) return null;
 
   const meta = CATEGORY_META[title] || {
@@ -66,6 +77,53 @@ export default function CategorySection({ title, products = [] }) {
     title === "Discount"
       ? "/discount"
       : `/products?category=${encodeURIComponent(title)}`;
+
+  if (isHalfWidth) {
+    return (
+      <section id={sectionId} className="w-full scroll-mt-24">
+        {/* Category Section Header */}
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 border-b border-slate-200/80 pb-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl bg-sky-100 text-sky-600 shrink-0">
+                <IconComponent className="h-4 w-4" />
+              </div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-xl lg:text-2xl font-extrabold tracking-tight text-slate-900">
+                  {title}
+                </h2>
+                <span
+                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] sm:text-xs font-semibold ring-1 ${meta.badgeBg}`}
+                >
+                  {products.length} {products.length === 1 ? "Item" : "Items"}
+                </span>
+              </div>
+            </div>
+            <p className="text-[11px] sm:text-xs text-slate-500 line-clamp-1">{meta.tagline}</p>
+          </div>
+
+          <Link
+            href={exploreHref}
+            className="inline-flex items-center gap-1 text-xs font-bold text-sky-600 hover:text-sky-700 transition-colors shrink-0 group"
+          >
+            <span>Explore All</span>
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        {/* Product Grid (2 columns) */}
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:gap-5">
+          {products.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              variant={product.category === "Discount" ? "discount" : "default"}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section

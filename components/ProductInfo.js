@@ -17,15 +17,24 @@ export default function ProductInfo({ product }) {
     <div className="space-y-6">
       {/* Category & Rating Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        {product.category && (
-          <Link
-            href={`/products`}
-            className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3.5 py-1 text-xs font-semibold text-sky-700 ring-1 ring-sky-600/20 transition hover:bg-sky-100"
-          >
-            <span>Category:</span>
-            <span className="font-bold text-sky-800">{product.category}</span>
-          </Link>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {product.category && (
+            <Link
+              href={`/products?category=${encodeURIComponent(product.category)}`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3.5 py-1 text-xs font-semibold text-sky-700 ring-1 ring-sky-600/20 transition hover:bg-sky-100"
+            >
+              <span>Category:</span>
+              <span className="font-bold text-sky-800">{product.category}</span>
+            </Link>
+          )}
+
+          {product.subCategory && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+              <span>Type:</span>
+              <span className="font-bold text-slate-900">{product.subCategory}</span>
+            </span>
+          )}
+        </div>
 
         {/* Rating Stars */}
         <div className="flex items-center gap-2">

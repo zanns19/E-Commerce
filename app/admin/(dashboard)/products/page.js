@@ -17,15 +17,9 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-const CATEGORIES = [
-  "All",
-  "Kitchen",
-  "Instant Gyser",
-  "Regulator",
-  "Valves",
-  "Accessories",
-  "Discount",
-];
+import { CATEGORIES } from "@/lib/categories";
+
+const CATEGORY_FILTER_OPTIONS = ["All", ...CATEGORIES];
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -74,7 +68,8 @@ export default function AdminProductsPage() {
 
       const nameMatch = p.product_name?.toLowerCase().includes(query);
       const descMatch = p.desc?.toLowerCase().includes(query);
-      return matchesCategory && (nameMatch || descMatch);
+      const subMatch = p.subCategory?.toLowerCase().includes(query);
+      return matchesCategory && (nameMatch || descMatch || subMatch);
     });
   }, [products, selectedCategory, searchQuery]);
 
@@ -126,7 +121,7 @@ export default function AdminProductsPage() {
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 outline-none transition focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-500/20"
           >
-            {CATEGORIES.map((cat) => (
+            {CATEGORY_FILTER_OPTIONS.map((cat) => (
               <option key={cat} value={cat}>
                 {cat === "All" ? "All Categories" : cat}
               </option>
@@ -184,12 +179,12 @@ export default function AdminProductsPage() {
             <table className="w-full text-left text-xs sm:text-sm">
               <thead className="border-b border-slate-200 bg-slate-50/70 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 <tr>
-                  <th className="px-5 py-3.5">Product</th>
-                  <th className="px-5 py-3.5">Category</th>
-                  <th className="px-5 py-3.5">Price</th>
-                  <th className="px-5 py-3.5">Stock Status</th>
-                  <th className="px-5 py-3.5">Rating</th>
-                  <th className="px-5 py-3.5 text-right">Actions</th>
+                  <th className="px-4 py-3">Product</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Category</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Price</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Stock Status</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Rating</th>
+                  <th className="px-4 py-3 text-center whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -203,27 +198,30 @@ export default function AdminProductsPage() {
                       key={p._id}
                       className="transition-colors hover:bg-slate-50/70"
                     >
-                      {/* Product Thumbnail & Title */}
-                      <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-3.5">
-                          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 p-1">
+                      {/* Product Thumbnail & Title (No description) */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 p-1">
                             <Image
                               src={p.image || "/logo.jpg"}
                               alt={p.product_name || "Product"}
                               fill
-                              sizes="48px"
+                              sizes="40px"
                               className="object-contain"
                             />
                           </div>
 
-                          <div className="min-w-0 max-w-xs">
-                            <div className="flex items-center gap-1.5">
-                              <p className="truncate font-bold text-slate-900">
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span
+                                className="font-bold text-slate-900 line-clamp-1"
+                                title={p.product_name}
+                              >
                                 {p.product_name}
-                              </p>
+                              </span>
                               {p.featured && (
                                 <span
-                                  className="inline-flex items-center rounded bg-amber-50 px-1 py-0.5 text-[9px] font-extrabold text-amber-700 ring-1 ring-amber-200 shrink-0"
+                                  className="inline-flex items-center rounded bg-amber-50 px-1 py-0.5 text-[9px] font-extrabold text-amber-700 ring-1 ring-amber-200 shrink-0 whitespace-nowrap"
                                   title="Featured product on homepage"
                                 >
                                   <Sparkles className="h-2.5 w-2.5 mr-0.5" />
@@ -231,23 +229,27 @@ export default function AdminProductsPage() {
                                 </span>
                               )}
                             </div>
-                            <p className="truncate text-[11px] text-slate-400 mt-0.5">
-                              {p.desc || "No description"}
-                            </p>
                           </div>
                         </div>
                       </td>
 
                       {/* Category Tag */}
-                      <td className="px-5 py-3.5">
-                        <span className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
-                          <Tag className="h-3 w-3 text-slate-400" />
-                          {p.category}
-                        </span>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex flex-col gap-1 items-start">
+                          <span className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 whitespace-nowrap">
+                            <Tag className="h-3 w-3 text-slate-400 shrink-0" />
+                            {p.category}
+                          </span>
+                          {p.subCategory && (
+                            <span className="inline-flex items-center rounded-md bg-sky-50 px-2 py-0.5 text-[10px] font-semibold text-sky-700 ring-1 ring-sky-200 whitespace-nowrap">
+                              {p.subCategory}
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       {/* Price */}
-                      <td className="px-5 py-3.5">
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <div>
                           <p className="font-extrabold text-slate-900">
                             Rs. {price.toLocaleString()}
@@ -261,16 +263,16 @@ export default function AdminProductsPage() {
                       </td>
 
                       {/* Stock Status */}
-                      <td className="px-5 py-3.5">
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${
+                          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold whitespace-nowrap ${
                             inStock
                               ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
                               : "bg-rose-50 text-rose-700 ring-1 ring-rose-200"
                           }`}
                         >
                           <span
-                            className={`h-1.5 w-1.5 rounded-full ${
+                            className={`h-1.5 w-1.5 rounded-full shrink-0 ${
                               inStock ? "bg-emerald-500 animate-pulse" : "bg-rose-500"
                             }`}
                           />
@@ -279,12 +281,12 @@ export default function AdminProductsPage() {
                       </td>
 
                       {/* Rating */}
-                      <td className="px-5 py-3.5 font-bold text-amber-700">
+                      <td className="px-4 py-3 font-bold text-amber-700 whitespace-nowrap">
                         ★ {Number(p.rating || 5).toFixed(1)}
                       </td>
 
                       {/* Actions */}
-                      <td className="px-5 py-3.5 text-right">
+                      <td className="px-4 py-3 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1.5">
                           <Link
                             href={`/products/${p._id}`}

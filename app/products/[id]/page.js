@@ -92,10 +92,25 @@ export default async function ProductPage({ params }) {
                 </li>
                 <li>
                   <Link
-                    href="/products"
+                    href={`/products?category=${encodeURIComponent(product.category)}`}
                     className="text-gray-600 transition hover:text-sky-600"
                   >
                     {product.category}
+                  </Link>
+                </li>
+              </>
+            )}
+            {product.subCategory && (
+              <>
+                <li className="text-gray-300">
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </li>
+                <li>
+                  <Link
+                    href={`/products?category=${encodeURIComponent(product.category)}&subCategory=${encodeURIComponent(product.subCategory)}`}
+                    className="text-gray-600 transition hover:text-sky-600"
+                  >
+                    {product.subCategory}
                   </Link>
                 </li>
               </>
