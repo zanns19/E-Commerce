@@ -5,9 +5,9 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import HeroText from "./HeroText";
 const slides = [
-  "/crousel1.jpg",
-  "/crousel2.jpg",
-  "/crousel3.jpg",
+  "/crousel3.png",
+  "/1234.png",
+  "/crosel321.png",
 ];
 
 export default function HeroCarousel() {

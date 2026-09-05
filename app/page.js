@@ -51,10 +51,10 @@ const CATEGORY_PILLS = [
   { name: "Discount", icon: Percent, href: "#category-discount" },
   { name: "Kitchen", icon: Utensils, href: "#category-kitchen" },
   { name: "Camping Stoves", icon: Tent, href: "#category-camping-stoves" },
-  { name: "Instant Gyser", icon: Flame, href: "#category-instant-gyser" },
-  { name: "Regulator", icon: Gauge, href: "#category-regulator" },
-  { name: "Valves", icon: Sliders, href: "#category-valves" },
-  { name: "Accessories", icon: Layers, href: "#category-accessories" },
+  { name: "Instant Gyser", icon: Flame, href: "/products?category=Instant%20Gyser" },
+  { name: "Regulator", icon: Gauge, href: "/products?category=Regulator" },
+  { name: "Valves", icon: Sliders, href: "/products?category=Valves" },
+  { name: "Accessories", icon: Layers, href: "/products?category=Accessories" },
 ];
 
 const HOMEPAGE_CATEGORIES_CONFIG = [
@@ -155,14 +155,14 @@ export default async function Home() {
             {CATEGORY_PILLS.map((cat) => {
               const Icon = cat.icon;
               return (
-                <a
+                <Link
                   key={cat.name}
                   href={cat.href}
                   className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700 active:scale-95 shrink-0"
                 >
                   <Icon className="h-3.5 w-3.5 text-sky-600" />
                   <span>{cat.name}</span>
-                </a>
+                </Link>
               );
             })}
           </div>

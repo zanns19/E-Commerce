@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { ZoomIn, Tag, CheckCircle2, AlertCircle } from "lucide-react";
+import { ZoomIn, Tag, CheckCircle2, AlertCircle, X, Sparkles } from "lucide-react";
 
 export default function ProductImage({ product }) {
+  const [isOpen, setIsOpen] = useState(false);
   const inStock = (product?.stock ?? 0) > 0;
   const hasDiscount = Boolean(product?.discount && product.discount > 0);
 
@@ -11,7 +13,7 @@ export default function ProductImage({ product }) {
     <div className="relative w-full">
       {/* Product Image Frame */}
       <div className="group relative overflow-hidden rounded-2xl border border-gray-200/80 bg-gradient-to-b from-gray-50 to-white p-4 shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-md">
-        
+
         {/* Floating Badges */}
         <div className="absolute left-4 top-4 z-10 flex flex-wrap items-center gap-2">
           {/* Stock Badge */}
@@ -25,20 +27,21 @@ export default function ProductImage({ product }) {
             {inStock ? (
               <>
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                In Stock
+                <span>In Stock</span>
               </>
             ) : (
               <>
                 <AlertCircle className="h-3.5 w-3.5 text-rose-600" />
-                Out of Stock
+                <span>Out of Stock</span>
               </>
             )}
           </span>
 
           {/* Featured Badge */}
           {product.featured && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-500/20">
-              ★ Featured
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-3 py-1 text-xs font-bold text-white shadow-sm shadow-amber-500/25 ring-1 ring-amber-400/40">
+              <Sparkles className="h-3.5 w-3.5 text-amber-100" />
+              <span>Featured</span>
             </span>
           )}
         </div>
@@ -53,11 +56,10 @@ export default function ProductImage({ product }) {
           </div>
         )}
 
-        {/* Clickable Image */}
-        <a
-          href={product.image}
-          target="_blank"
-          rel="noopener noreferrer"
+        {/* Clickable Image (opens modal instead of new tab) */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
           className="relative block h-[360px] sm:h-[420px] md:h-[460px] w-full overflow-hidden rounded-xl bg-white"
         >
           <Image
@@ -76,8 +78,39 @@ export default function ProductImage({ product }) {
               Click to view full image
             </span>
           </div>
-        </a>
+        </button>
       </div>
+
+            {/* Fullscreen Modal */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/90 p-1 sm:p-2"
+          onClick={() => setIsOpen(false)}
+        >
+          {/* Close (X) button — top right */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 rounded-full bg-white/90 p-2 text-gray-800 shadow-md transition hover:bg-white"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5" />
+          </button>
+
+          <div
+            className="relative h-[95vh] w-[98vw] sm:h-[95vh] sm:w-[95vw]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={product.image}
+              alt={product.product_name}
+              fill
+              sizes="100vw"
+              className="object-contain"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

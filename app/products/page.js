@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
 import ProductsCatalog from "@/components/ProductsCatalog";
@@ -18,6 +19,17 @@ export default async function ProductsPage() {
     publishedAt: product.publishedAt ? product.publishedAt.toISOString() : null,
   }));
 
-  return <ProductsCatalog initialProducts={formattedProducts} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen py-16 text-center text-slate-500">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-sky-600 border-r-transparent align-[-0.125em]" />
+          <p className="mt-3 text-sm font-medium">Loading catalog...</p>
+        </div>
+      }
+    >
+      <ProductsCatalog initialProducts={formattedProducts} />
+    </Suspense>
+  );
 }
 

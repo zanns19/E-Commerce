@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search, X, Filter, RotateCcw } from "lucide-react";
 import CategorySection from "./CategorySection";
 import { CATEGORIES, KITCHEN_SUBCATEGORIES } from "@/lib/categories";
 
 export default function ProductsCatalog({ initialProducts = [] }) {
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedSubCategory, setSelectedSubCategory] = useState("all");
@@ -13,32 +15,34 @@ export default function ProductsCatalog({ initialProducts = [] }) {
 
   // Auto-focus search input or initialize category from URL query (?category=... or ?focus=search)
   useEffect(() => {
-    const checkAndFocus = () => {
-      const params = new URLSearchParams(window.location.search);
-      const catParam = params.get("category");
-      if (catParam && CATEGORIES.includes(catParam)) {
-        setSelectedCategory(catParam);
-      }
-      const subParam = params.get("subCategory");
-      if (subParam) {
-        setSelectedSubCategory(subParam);
-      }
+    const catParam = searchParams.get("category");
+    if (catParam && CATEGORIES.includes(catParam)) {
+      setSelectedCategory(catParam);
+    } else if (catParam === null) {
+      setSelectedCategory("all");
+    }
 
-      if (params.get("focus") === "search") {
-        setTimeout(() => {
-          if (searchInputRef.current) {
-            searchInputRef.current.focus();
-            searchInputRef.current.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-          }
-        }, 100);
-      }
-    };
+    const subParam = searchParams.get("subCategory");
+    if (subParam) {
+      setSelectedSubCategory(subParam);
+    } else {
+      setSelectedSubCategory("all");
+    }
 
-    checkAndFocus();
+    if (searchParams.get("focus") === "search") {
+      setTimeout(() => {
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+          searchInputRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 100);
+    }
+  }, [searchParams]);
 
+  useEffect(() => {
     const handleCustomFocus = () => {
       if (searchInputRef.current) {
         searchInputRef.current.focus();

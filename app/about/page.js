@@ -333,7 +333,7 @@ export default function AboutPage() {
               <div className="lg:col-span-5">
                 <div className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-lg">
                   <img
-                    src="/logo.jpg"
+                    src="/about.png"
                     alt="Ahmad ElectroGas Heritage"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
